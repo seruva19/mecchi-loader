@@ -3,10 +3,6 @@
 A tiny app written with [Golang](https://go.dev/) and [Fyne](https://github.com/fyne-io/fyne) for managing [Mecchi](https://github.com/seruva19/mecchi).  
 For now it is a simple wrapper over package.json scripts, but it ~~will~~ might evolve.
 
-## Screenshot
-
-![img](/images/mecchi-loader.png)
-
 ## Usage
 
 Requires Go 1.20+.  

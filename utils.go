@@ -68,26 +68,13 @@ func MecchiFolderExists() LoaderResult[string] {
 	}
 }
 
-func containsFile(folderPath string, targetFile string) bool {
-	filePath := filepath.Join(folderPath, targetFile)
-	_, err := os.Stat(filePath)
-	return err == nil
-}
-
 func FindMecchiDirectory(rootPath string) (string, error) {
 	targetFolder := "src"
 	targetFile := "mecchi.py"
 
 	folders, err := os.ReadDir(rootPath)
 
-	for _, folder := range folders {
-		if folder.IsDir() {
-			fmt.Println(folder.Name())
-		}
-	}
-
 	if err != nil {
-		fmt.Printf(err.Error())
 		return "", err
 	}
 
@@ -95,11 +82,9 @@ func FindMecchiDirectory(rootPath string) (string, error) {
 		if folder.IsDir() {
 			subfolderPath := filepath.Join(rootPath, folder.Name())
 			srcFilePath := filepath.Join(subfolderPath, targetFolder, targetFile)
-			fmt.Println(srcFilePath)
 
 			_, err := os.Stat(srcFilePath)
 			if err == nil {
-				fmt.Println("found " + subfolderPath)
 				return subfolderPath, nil
 			}
 

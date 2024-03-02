@@ -11,7 +11,7 @@ import (
 func main() {
 	mecchiLoader := app.New()
 
-	window := mecchiLoader.NewWindow("mecchi loader")
+	window := mecchiLoader.NewWindow("Mecchi Loader")
 	window.Resize(fyne.NewSize(WindowWidth, WindowHeight))
 
 	input := widget.NewMultiLineEntry()

@@ -21,13 +21,9 @@ func CloneMecchi() LoaderResult[string] {
 
 	fullPath := filepath.Join(currentDir, MecchiFolder)
 
-	_, err := git.PlainClone(fullPath, false, &git.CloneOptions{
+	git.PlainClone(fullPath, false, &git.CloneOptions{
 		URL: MecchiRepo,
 	})
-
-	if err != nil {
-		return LoaderResult[string]{success: false, error: err.Error()}
-	}
 
 	return LoaderResult[string]{success: true, result: fullPath}
 }

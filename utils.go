@@ -55,7 +55,7 @@ func MecchiFolderExists() LoaderResult[string] {
 		return LoaderResult[string]{success: false, error: err.Error()}
 	}
 
-	subdirectory, err := FindFile(currentDir, "src", "mecchi.py")
+	subdirectory, err := FindMecchiDirectory(currentDir)
 
 	if err != nil {
 		return LoaderResult[string]{success: false, error: err.Error()}
@@ -64,34 +64,49 @@ func MecchiFolderExists() LoaderResult[string] {
 	if subdirectory != "" {
 		return LoaderResult[string]{success: true, result: subdirectory}
 	} else {
-		return LoaderResult[string]{success: false, error: "mecchi folder not found"}
+		return LoaderResult[string]{success: false, error: currentDir}
 	}
 }
 
-func FindFile(rootPath string, foldername string, filename string) (string, error) {
-	var resultPath string
+func containsFile(folderPath string, targetFile string) bool {
+	filePath := filepath.Join(folderPath, targetFile)
+	_, err := os.Stat(filePath)
+	return err == nil
+}
 
-	err := filepath.WalkDir(rootPath, func(path string, d os.DirEntry, err error) error {
-		if err != nil {
-			return err
+func FindMecchiDirectory(rootPath string) (string, error) {
+	targetFolder := "src"
+	targetFile := "mecchi.py"
+
+	folders, err := os.ReadDir(rootPath)
+
+	for _, folder := range folders {
+		if folder.IsDir() {
+			fmt.Println(folder.Name())
 		}
-
-		if d.IsDir() && d.Name() == foldername {
-			targetFilePath := filepath.Join(path, filename)
-			if _, err := os.Stat(targetFilePath); err == nil {
-				resultPath = filepath.Dir(path)
-				return filepath.SkipDir
-			}
-		}
-
-		return nil
-	})
+	}
 
 	if err != nil {
+		fmt.Printf(err.Error())
 		return "", err
 	}
 
-	return resultPath, nil
+	for _, folder := range folders {
+		if folder.IsDir() {
+			subfolderPath := filepath.Join(rootPath, folder.Name())
+			srcFilePath := filepath.Join(subfolderPath, targetFolder, targetFile)
+			fmt.Println(srcFilePath)
+
+			_, err := os.Stat(srcFilePath)
+			if err == nil {
+				fmt.Println("found " + subfolderPath)
+				return subfolderPath, nil
+			}
+
+		}
+	}
+
+	return "", nil
 }
 
 func OpenInBrowser(url string) error {

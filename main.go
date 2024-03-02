@@ -57,7 +57,7 @@ func MainUi(input *widget.Entry, loading func(bool)) *fyne.Container {
 			mecchiFolder := MecchiFolderExists()
 
 			if !mecchiFolder.success {
-				OutputResult(input, "Mecchi does not exist, install it first!")
+				OutputResult(input, "Mecchi does not exist, install it first! "+mecchiFolder.error)
 			} else {
 				OutputResult(input, "Launching Mecchi...")
 				mecchiProcess := LaunchMecchi(mecchiFolder.result, input)
